@@ -79,15 +79,6 @@ func (C *Chaincode) createUser(stub shim.ChaincodeStubInterface, args []string) 
 		return shim.Error("Incorrect arguments, Want 4 input.")
 	}
 
-	// Check if User already exists
-	ck, err := stub.GetState(args[0])
-	if err != nil {
-		return shim.Error(err.Error())
-	} else if ck != nil {
-		fmt.Println("This user already exists :" + args[0])
-		return shim.Error("This user already exists")
-	}
-
 	// Create user object
 	id := strings.ToLower(args[0])
 	name := strings.ToLower(args[1])
@@ -95,6 +86,18 @@ func (C *Chaincode) createUser(stub shim.ChaincodeStubInterface, args []string) 
 	status, err := strconv.ParseBool(args[3])
 	if err != nil {
 		return shim.Error("Arguments 4 must be 'boolean'" + err.Error())
+	}
+
+	// Key for query
+	key := "stdID|" + id
+
+	// Check if User already exists
+	ck, err := stub.GetState(key)
+	if err != nil {
+		return shim.Error(err.Error())
+	} else if ck != nil {
+		fmt.Println("This user already exists :" + args[0])
+		return shim.Error("This user already exists")
 	}
 
 	// To JSON byte
@@ -105,7 +108,6 @@ func (C *Chaincode) createUser(stub shim.ChaincodeStubInterface, args []string) 
 	}
 
 	// Save key-value
-	key := "stdID|" + id
 	err = stub.PutState(key, jsonByte)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -126,13 +128,17 @@ func (C *Chaincode) createWallet(stub shim.ChaincodeStubInterface, args []string
 	walletName := strings.ToLower(args[0])
 	money, err := strconv.ParseFloat(args[1], 64)
 	if err != nil {
+		fmt.Sprintln("Arguments 2 must be number. : " + err.Error())
 		return shim.Error("Arguments 2 must be number. : " + err.Error())
 	}
 	owner := strings.ToLower(args[2])
 	wallet := Wallet{walletName, money, owner}
 
+	// Key for query
+	key := "wallet|" + walletName
+
 	// Check if already
-	ck, err := stub.GetState(walletName)
+	ck, err := stub.GetState(key)
 	if err != nil {
 		return shim.Error(err.Error())
 	} else if ck != nil {
@@ -147,7 +153,6 @@ func (C *Chaincode) createWallet(stub shim.ChaincodeStubInterface, args []string
 	}
 
 	// Save key-value
-	key := "wallet|" + walletName
 	err = stub.PutState(key, jsonByte)
 	if err != nil {
 		return shim.Error(err.Error())

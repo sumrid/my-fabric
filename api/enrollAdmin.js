@@ -15,8 +15,8 @@ const ccp = JSON.parse(ccpJSON);         // เปลี่ยน string เป�
 
 async function main() {
     try {
-        const username = 'admin';
-        // /home/sumrid/go/src/github.com/sumrid/my-fabric/api
+        const ADMIN = 'admin';
+        
         // Create a new CA client for interacting with the CA.
         const caURL = ccp.certificateAuthorities['ca1.example.com'].url;
         const ca = new FabricCAServices(caURL);
@@ -27,16 +27,16 @@ async function main() {
         console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the admin user.
-        const adminExists = await wallet.exists(username);
+        const adminExists = await wallet.exists(ADMIN);
         if (adminExists) {
             console.log('An identity for the admin user "admin" already exists in the wallet');
             return;
         }
 
         // Enroll the admin user, and import the new identity into the wallet.
-        const enrollment = await ca.enroll({ enrollmentID: username, enrollmentSecret: 'adminpw' });
+        const enrollment = await ca.enroll({ enrollmentID: ADMIN, enrollmentSecret: 'adminpw' });
         const identity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-        wallet.import(username, identity);
+        wallet.import(ADMIN, identity);
         console.log('Successfully enrolled admin user "admin" and imported it into the wallet');
 
     } catch (error) {

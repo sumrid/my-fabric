@@ -24,7 +24,24 @@ router.get('/transfer/:from/:to/:amount', async (req, res) => {
 router.post('/add', async (req, res) => {
     const userList = req.body;
     const result = await conntorller.add(userList);
-    res.json(userList);
+    res.json(result);
+});
+
+router.post('/create/user', async (req, res) => {
+    const user = req.body;
+    const result = await conntorller.createUser(user);
+    res.json(result);
+})
+
+router.post('/create/wallet', async (req, res) => {
+    const wallet = req.body;
+
+    try {
+        const result = await conntorller.createWallet(wallet);
+        res.json(result);
+    } catch (err) {
+        res.status(500).json(err);
+    }
 })
 
 module.exports = router;

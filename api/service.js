@@ -3,18 +3,20 @@ const fs = require('fs');
 const path = require('path');
 
 // ทำการอ่านไฟล์ connection.json
-const ccpPath = path.resolve(__dirname, '..', '..', 'my_network', 'connection.json');
+const ccpPath = path.resolve(__dirname, '..', 'network', 'connection.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
 // Create a new file system based wallet for managing identities.
-const walletPath = path.join(process.cwd(), '..', 'javascript', 'wallet');
+const walletPath = path.join(process.cwd(), 'wallet');
 const wallet = new FileSystemWallet(walletPath);
 console.log(`Wallet path: ${walletPath}`);
 
 const USER = 'user1';
 const FN_QUERY = 'query';
 const FN_TRANSFER = 'invoke';
+const FN_CREATE_USER = 'createUser';
+const FN_CREATE_WALLET = 'createWallet';
 const FN_INIT = 'init'
 const CHANNEL = 'mychannel-1';
 const CONTRACT = 'mycc';
@@ -71,9 +73,32 @@ exports.transfer = async (from, to, amount) => {
 exports.add = async (user1, user2) => {
     try {
         const contract = await connectToNetwork(USER);
-        const result = await contract.submitTransaction(FN_INIT, user1.key, user1.value, user2.key, user2.value); 
+        const result = await contract.submitTransaction(FN_INIT, user1.key, user1.value, user2.key, user2.value);
+        return result;
     } catch (err) {
         console.error(err);
         return err;
+    }
+}
+
+exports.createUser = async (stdID, name, tel, status = false) => {
+    try {
+        const contract = await connectToNetwork(USER);
+        const result = await contract.submitTransaction(FN_CREATE_USER, stdID, name, tel, status);
+        return result;
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
+}
+
+exports.createWallet = async (wallet) => {
+    try {
+        const contract = await connectToNetwork(USER);
+        const result = await contract.submitTransaction(FN_CREATE_WALLET, wallet.walletName, wallet.money, wallet.owner);
+        return result;
+    } catch (err) {
+        console.error(err);
+        throw err;
     }
 }

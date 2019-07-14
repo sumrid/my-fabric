@@ -38,16 +38,17 @@ async function main() {
         // Get the contract from the network.
         const contract = network.getContract('mycc');
 
-        // Evaluate the specified transaction.
-        // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
-        // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        let result = await contract.evaluateTransaction('query', 'stdID|59070174');
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
-        result = await contract.evaluateTransaction('query', 'wallet|hello-world');
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        // Submit the specified transaction.
+        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
+        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
+        const r = await contract.submitTransaction("createUser","59070174","Sumrid","089..","true");
+        console.log('Transaction has been submitted ' + r.toString());
+
+        // Disconnect from the gateway.
+        await gateway.disconnect();
 
     } catch (error) {
-        console.error(`Failed to evaluate transaction: ${error}`);
+        console.error(`Failed to submit transaction: ${error}`);
         process.exit(1);
     }
 }
