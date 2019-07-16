@@ -9,7 +9,7 @@ const { FileSystemWallet, X509WalletMixin } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '..', 'network', 'connection.json');   // ที่อยู่ไฟล์ ../../basic-network/connection.json
+const ccpPath = path.resolve(__dirname, '..', 'network', 'connection.json');   // ที่อยู่ไฟล์ ../network/connection.json
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');  // อ่านไฟล์
 const ccp = JSON.parse(ccpJSON);         // เปลี่ยน string เป็น json
 
@@ -40,7 +40,7 @@ async function main() {
         console.log('Successfully enrolled admin user "admin" and imported it into the wallet');
 
     } catch (error) {
-        console.error(`Failed to enroll admin user "admin": ${error}`);
+        console.error(`Failed to enroll admin user "${ADMIN}": ${error}`);
         process.exit(1);
     }
 }

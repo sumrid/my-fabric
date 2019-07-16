@@ -9,7 +9,7 @@ router.get('/query/:key', async (req, res) => {
 
     // JSON.stringify() เปลี่ยน object เป็น string
     // JSON.parse() เปลี่ยน json form เป็น object
-    res.send(JSON.parse(JSON.stringify(result)));
+    res.json(JSON.parse(JSON.stringify(result)));
 });
 
 router.get('/transfer/:from/:to/:amount', async (req, res) => {

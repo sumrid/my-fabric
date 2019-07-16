@@ -12,7 +12,7 @@ exports.query = async key => {
 
     let res = {
         "key": key,
-        "result": String(result)
+        "result": JSON.parse(String(result))
     };
     return res;
 }
@@ -42,13 +42,13 @@ exports.createUser = async (user) => {
         return result;
     }
 
-    return String(result);
+    return JSON.parse(String(result));
 }
 
 exports.createWallet = async (wallet) => {
     try {
         const result = await service.createWallet(wallet);
-        return String(result);
+        return JSON.parse(String(result));
     } catch (err) {
         throw err
     }

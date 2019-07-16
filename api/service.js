@@ -21,10 +21,9 @@ const FN_INIT = 'init'
 const CHANNEL = 'mychannel-1';
 const CONTRACT = 'mycc';
 
-// Connect to network then return contract
-async function connectToNetwork(user) {
+async function getGateway(user) {
     try {
-
+        // Check user
         const userExists = await wallet.exists(user);
         if (!userExists) {
             console.log('An identity for the user "user1" does not exist in the wallet');
@@ -34,22 +33,44 @@ async function connectToNetwork(user) {
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: USER, discovery: { enabled: false } });
+        await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: false } });
+        return gateway;
+    } catch (err) {
+        console.error(`Failed to evaluate transaction: ${error}`);
+        throw err;
+    }
+}
 
+// Connect to network then return contract
+async function getContract(user) {
+    try {
+        const gateway = await getGateway(user);
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork(CHANNEL);
-
         // Get the contract from the network.
         return network.getContract(CONTRACT);
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
-        return;
+        throw error;
     }
 }
 
+async function getChannel(user, channelName) {
+    try {
+        const gateway = await getGateway(user);
+        const network = await gateway.getNetwork(channelName);
+        return network.getChannel();
+    } catch (err) {
+
+    }
+}
+
+// #####################
+// #  Query and Invoke
+// #####################
 exports.query = async (key) => {
     try {
-        const contract = await connectToNetwork(USER);
+        const contract = await getContract(USER);
         const result = await contract.evaluateTransaction(FN_QUERY, key);
         return result;
     } catch (err) {
@@ -61,7 +82,7 @@ exports.query = async (key) => {
 
 exports.transfer = async (from, to, amount) => {
     try {
-        const contract = await connectToNetwork(USER);
+        const contract = await getContract(USER);
         const result = await contract.submitTransaction(FN_TRANSFER, from, to, amount);
         return result;
     } catch (err) {
@@ -72,7 +93,7 @@ exports.transfer = async (from, to, amount) => {
 
 exports.add = async (user1, user2) => {
     try {
-        const contract = await connectToNetwork(USER);
+        const contract = await getContract(USER);
         const result = await contract.submitTransaction(FN_INIT, user1.key, user1.value, user2.key, user2.value);
         return result;
     } catch (err) {
@@ -83,7 +104,7 @@ exports.add = async (user1, user2) => {
 
 exports.createUser = async (stdID, name, tel, status = false) => {
     try {
-        const contract = await connectToNetwork(USER);
+        const contract = await getContract(USER);
         const result = await contract.submitTransaction(FN_CREATE_USER, stdID, name, tel, status);
         return result;
     } catch (err) {
@@ -94,7 +115,7 @@ exports.createUser = async (stdID, name, tel, status = false) => {
 
 exports.createWallet = async (wallet) => {
     try {
-        const contract = await connectToNetwork(USER);
+        const contract = await getContract(USER);
         const result = await contract.submitTransaction(FN_CREATE_WALLET, wallet.walletName, wallet.money, wallet.owner);
         return result;
     } catch (err) {

@@ -14,7 +14,7 @@ const ccp = JSON.parse(ccpJSON);
 
 async function main() {
     try {
-        const USER = 'user2';
+        const USER = 'user1';
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
@@ -24,7 +24,7 @@ async function main() {
         // Check to see if we've already enrolled the user.
         const userExists = await wallet.exists(USER);
         if (userExists) {
-            console.log('An identity for the user USER already exists in the wallet');
+            console.log(`An identity for the user ${USER} already exists in the wallet`);
             return;
         }
 
@@ -49,10 +49,10 @@ async function main() {
         const enrollment = await ca.enroll({ enrollmentID: USER, enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
         wallet.import(USER, userIdentity);
-        console.log('Successfully registered and enrolled admin user "user1" and imported it into the wallet');
+        console.log(`Successfully registered and enrolled admin user "${USER}" and imported it into the wallet`);
 
     } catch (error) {
-        console.error(`Failed to register user "user1": ${error}`);
+        console.error(`Failed to register user "${USER}": ${error}`);
         process.exit(1);
     }
 }
