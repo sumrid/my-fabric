@@ -9,13 +9,15 @@ const { FileSystemWallet, X509WalletMixin } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '..', 'network', 'connection.json');   // ที่อยู่ไฟล์ ../network/connection.json
+const ccpPath = path.resolve(__dirname, 'connection.json');   // ที่อยู่ไฟล์ ../network/connection.json
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');  // อ่านไฟล์
 const ccp = JSON.parse(ccpJSON);         // เปลี่ยน string เป็น json
 
+const ADMIN = 'admin1';
+const ORG_MSP = 'Org1MSP';
+
 async function main() {
     try {
-        const ADMIN = 'admin';
         
         // Create a new CA client for interacting with the CA.
         const caURL = ccp.certificateAuthorities['ca1.example.com'].url;
@@ -35,9 +37,9 @@ async function main() {
 
         // Enroll the admin user, and import the new identity into the wallet.
         const enrollment = await ca.enroll({ enrollmentID: ADMIN, enrollmentSecret: 'adminpw' });
-        const identity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
+        const identity = X509WalletMixin.createIdentity(ORG_MSP, enrollment.certificate, enrollment.key.toBytes());
         wallet.import(ADMIN, identity);
-        console.log('Successfully enrolled admin user "admin" and imported it into the wallet');
+        console.log(`Successfully enrolled admin user "${ADMIN}" and imported it into the wallet`);
 
     } catch (error) {
         console.error(`Failed to enroll admin user "${ADMIN}": ${error}`);

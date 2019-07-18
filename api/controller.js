@@ -10,6 +10,7 @@ exports.query = async key => {
         return result;
     }
 
+    // ส่งผลลัพธ์กลับไป
     let res = {
         "key": key,
         "result": JSON.parse(String(result))
@@ -50,6 +51,15 @@ exports.createWallet = async (wallet) => {
         const result = await service.createWallet(wallet);
         return JSON.parse(String(result));
     } catch (err) {
-        throw err
+        throw err;
+    }
+}
+
+exports.test = async () => {
+    try {
+        const txID = await service.test();
+        return txID;
+    } catch (err) {
+        throw err;
     }
 }

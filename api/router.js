@@ -31,7 +31,7 @@ router.post('/create/user', async (req, res) => {
     const user = req.body;
     const result = await conntorller.createUser(user);
     res.json(result);
-})
+});
 
 router.post('/create/wallet', async (req, res) => {
     const wallet = req.body;
@@ -41,6 +41,15 @@ router.post('/create/wallet', async (req, res) => {
         res.json(result);
     } catch (err) {
         res.status(500).json(err);
+    }
+});
+
+router.get('/test', async (req, res) => {
+    try {
+        const result = await conntorller.test();
+        res.json(result);
+    } catch (err) {
+        res.status(500).send(err);
     }
 })
 

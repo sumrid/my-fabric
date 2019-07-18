@@ -23,6 +23,17 @@
                 "peer0.org2.example.com": {},
                 "peer1.org2.example.com": {}
             }
+        },
+        "mychannel-2": {
+            "orderers": [
+                "orderer.example.com"
+            ],
+            "peers": {
+                "peer0.org2.example.com": {},
+                "peer1.org2.example.com": {},
+                "peer0.org3.example.com": {},
+                "peer1.org3.example.com": {}
+            }
         }
     },
     "organizations": {
@@ -50,7 +61,7 @@
             "mspid": "Org3MSP",
             "peers": [
                 "peer0.org3.example.com",
-                "peer1.org2.example.com"
+                "peer1.org3.example.com"
             ],
             "certificateAuthorities": [
                 "ca3.example.com"

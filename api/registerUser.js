@@ -12,9 +12,10 @@ const ccpPath = path.resolve(__dirname, '..', 'network', 'connection.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
+const USER = 'tom';
+
 async function main() {
     try {
-        const USER = 'user1';
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
