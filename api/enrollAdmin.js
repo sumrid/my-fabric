@@ -13,7 +13,7 @@ const ccpPath = path.resolve(__dirname, 'connection.json');   // ที่อย
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');  // อ่านไฟล์
 const ccp = JSON.parse(ccpJSON);         // เปลี่ยน string เป็น json
 
-const ADMIN = 'admin1';
+const ADMIN = 'admin';
 const ORG_MSP = 'Org1MSP';
 
 async function main() {
