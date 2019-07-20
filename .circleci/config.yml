@@ -35,3 +35,20 @@ jobs:
           name: run tests
           command: |
             npm test
+
+  chaincode-test:
+    docker:
+      - image: circleci/golang:1.12
+    working_directory: ~/my-fabric/mychaincode/go
+    steps:
+      - checkout:
+          path: ~/my-fabric
+      - run:
+          name: Install dependencies
+          command: |
+            go mod tidy
+            go mod download
+      - run:
+          name: Test chaincode
+          command: |
+            go test
