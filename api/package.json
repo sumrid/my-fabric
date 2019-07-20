@@ -2,10 +2,10 @@
   "name": "api",
   "version": "1.0.0",
   "description": "api for connect to hyperledger fabric",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js"
+    "test": "jest --coverage",
+    "start": "node src/main.js"
   },
   "keywords": [
     "api",
@@ -19,6 +19,13 @@
     "fabric-ca-client": "^1.4.2",
     "fabric-client": "^1.4.3",
     "fabric-network": "^1.4.2",
-    "grpc": "^1.22.2"
+    "grpc": "^1.22.2",
+    "sinon": "^7.3.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "jest": "^24.8.0",
+    "mocha": "^6.2.0"
   }
 }

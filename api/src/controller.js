@@ -55,10 +55,22 @@ exports.createWallet = async (wallet) => {
     }
 }
 
+// ################
+//    Test zone
+// ################
 exports.test = async () => {
     try {
         const txID = await service.test();
         return txID;
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.query2 = async (query) => {
+    try {
+        const result = await service.query2(query);
+        return JSON.parse(String(result));
     } catch (err) {
         throw err;
     }

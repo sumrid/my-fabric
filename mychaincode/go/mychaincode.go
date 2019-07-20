@@ -39,10 +39,12 @@ func (C *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return C.createUser(stub, args)
 	} else if fn == "createWallet" {
 		return C.createWallet(stub, args)
+	} else if fn == "query2" {
+		return C.query2(stub, args)
 	}
 
 	fmt.Println("invoke did not find func: " + fn)
-	return shim.Error("Received unknown function invocation")
+	return shim.Error("Received unknown function " + fn)
 }
 
 func (C *Chaincode) query(stub shim.ChaincodeStubInterface, args []string) peer.Response {
@@ -161,6 +163,36 @@ func (C *Chaincode) createWallet(stub shim.ChaincodeStubInterface, args []string
 	// Return
 	fmt.Println("Create wallet success. wallet key: " + key)
 	return shim.Success(jsonByte)
+}
+
+func (C *Chaincode) query2(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	if len(args) != 1 {
+		return shim.Error("ต้องการหนึ่งอินพุท")
+	}
+
+	queryString := args[0]
+	interator, err := stub.GetQueryResult(queryString)
+	defer interator.Close()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	var results []string
+	for interator.HasNext() {
+		result, err := interator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		// เพิ่มผลลัพธ์ลงไปใน list
+		results = append(results, string(result.Value))
+	}
+
+	// Convert to byte
+	resultsByte, err := json.Marshal(results)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(resultsByte)
 }
 
 func main() {

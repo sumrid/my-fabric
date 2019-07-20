@@ -44,13 +44,27 @@ router.post('/create/wallet', async (req, res) => {
     }
 });
 
-router.get('/test', async (req, res) => {
+// #############
+//   Test zone
+// #############
+router.post('/test', async (req, res) => {
     try {
         const result = await conntorller.test();
         res.json(result);
     } catch (err) {
         res.status(500).send(err);
     }
-})
+});
+
+router.post('/query2', async (req, res) => {
+    const string = JSON.stringify(req.body)
+
+    try {
+        const result = await conntorller.query2(string)
+        res.json(result);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
 
 module.exports = router;

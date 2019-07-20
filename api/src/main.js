@@ -16,3 +16,5 @@ server.use('/api', require('./router'));
 server.listen(port, hostname, () => {
     console.log(`express server is running on port: ${port}`);
 });
+
+module.exports = server;

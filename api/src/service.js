@@ -3,12 +3,13 @@ const fs = require('fs');
 const path = require('path');
 
 // ทำการอ่านไฟล์ connection.json
-const ccpPath = path.resolve(__dirname, 'connection.json');
+const ccpPath = path.resolve(__dirname, '..', 'connection.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
 // Create a new file system based wallet for managing identities.
-const walletPath = path.join(process.cwd(), 'wallet');
+// const walletPath = path.join(process.cwd(), 'wallet');
+const walletPath = path.join(__dirname, 'wallet');
 const wallet = new FileSystemWallet(walletPath);
 console.log(`Wallet path: ${walletPath}`);
 
@@ -124,6 +125,9 @@ exports.createWallet = async (wallet) => {
     }
 }
 
+// ################
+//     Test zone
+// ################
 exports.test = async () => {
     try {
         // Get channel, client
@@ -207,6 +211,18 @@ exports.test = async () => {
         }
 
         // return txID.getTransactionID();
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
+// Query โดยใช้ selector
+exports.query2 = async (queryString) => {
+    try {
+        const contract = await getContract(USER);
+        const result = await contract.evaluateTransaction('query2', queryString);
+        return result;
     } catch (err) {
         console.error(err);
         throw err;
