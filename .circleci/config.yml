@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  api-test:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -52,3 +52,10 @@ jobs:
           name: Test chaincode
           command: |
             go test
+
+workflows:
+  version: 2
+  workflows:
+    jobs:
+      - api-test
+      - chaincode-test
