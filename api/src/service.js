@@ -62,7 +62,7 @@ async function getChannel(user, channelName) {
         const network = await gateway.getNetwork(channelName);
         return network.getChannel();
     } catch (err) {
-
+        throw err;
     }
 }
 
@@ -76,30 +76,7 @@ exports.query = async (key) => {
         return result;
     } catch (err) {
         console.error(err);
-        return err;
-    }
-
-}
-
-exports.transfer = async (from, to, amount) => {
-    try {
-        const contract = await getContract(USER);
-        const result = await contract.submitTransaction(FN_TRANSFER, from, to, amount);
-        return result;
-    } catch (err) {
-        console.error(err);
-        return err;
-    }
-}
-
-exports.add = async (user1, user2) => {
-    try {
-        const contract = await getContract(USER);
-        const result = await contract.submitTransaction(FN_INIT, user1.key, user1.value, user2.key, user2.value);
-        return result;
-    } catch (err) {
-        console.error(err);
-        return err;
+        throw err;
     }
 }
 
@@ -110,7 +87,7 @@ exports.createUser = async (stdID, name, tel, status = false) => {
         return result;
     } catch (err) {
         console.error(err);
-        return err;
+        throw err;
     }
 }
 

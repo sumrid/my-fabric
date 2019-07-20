@@ -1,5 +1,6 @@
 const controller = require('../src/controller');
 const service = require('../src/service');
+const mock = require('./mockData');
 const sinon = require('sinon');
 const expect = require('chai').expect;
 
@@ -15,6 +16,9 @@ describe('Test controller.js', () => {
     //     sandbox.replace(service, 'query', stubService.query);
     // });
 
+    afterEach(() => {
+        sinon.restore();
+    });
 
     // Create stub
     const stubService = {};
@@ -22,8 +26,7 @@ describe('Test controller.js', () => {
     stubService.createUser = sinon.stub();
     stubService.createWallet = sinon.stub();
 
-
-    it('Test get success', async () => {
+    it('Test query success', async () => {
         // Arrange
         const resultStub = { "message": "Hello world" };
         stubService.query.withArgs('testKey')
@@ -41,12 +44,8 @@ describe('Test controller.js', () => {
 
     it('Test create user success', async () => {
         // Arrange
-        let id = '001';
-        let name = 'sumrid';
-        let tel = '0899999999';
-        let status = 'true';
-        const user = { stdID: id, name: name, tel: tel, status: status };
-        stubService.createUser.withArgs(id, name, tel, status)
+        const user = mock.user;
+        stubService.createUser.withArgs(user.stdID, user.name, user.tel, user.status)
             .returns(Buffer.from(JSON.stringify(user)));
         sinon.replace(service, 'createUser', stubService.createUser);
 
@@ -60,10 +59,7 @@ describe('Test controller.js', () => {
 
     it('Test create wallet success', async () => {
         // Arrange
-        let walletName = "my-wallet";
-        let money = "5000";
-        let owner = "sumrid";
-        const wallet = { walletName: walletName, money: money, owner: owner };
+        const wallet = mock.wallet;
         stubService.createWallet.withArgs(wallet)
             .returns(Buffer.from(JSON.stringify(wallet)));
         sinon.replace(service, 'createWallet', stubService.createWallet);
@@ -75,4 +71,51 @@ describe('Test controller.js', () => {
         // Assert
         expect(result).eql(wallet);
     });
+
+    it('Test query fails', async () => {
+        stubService.query.withArgs('testKey').throws('something');
+        sinon.replace(service, 'query', stubService.query);
+
+        try {
+            const result = await controller.query('testKey');
+            console.log(result);
+        } catch (err) {
+            console.log(err);
+            expect(String(err)).eql('something');
+        }
+    });
+
+    it('Test create user fails', async () => {
+        const user = mock.user;
+        stubService.createUser
+            .withArgs(user.stdID, user.name, user.tel, user.status)
+            .throws('something');
+        sinon.replace(service, 'createUser', stubService.createUser);
+
+        try {
+            await controller.createUser(user);
+            console.log(result);
+        } catch (err) {
+            console.log(err);
+            expect(String(err)).eql('something');
+        }
+    });
+
+    it('Test create wallet fails', async ()=> {
+        // Arrange
+        const wallet = mock.wallet;
+        stubService.createWallet.withArgs(wallet)
+            .throws('something')
+        sinon.replace(service, 'createWallet', stubService.createWallet);
+
+        // Act
+        try {
+            await controller.createWallet(wallet);
+        } catch (err) {
+            // Assert
+            console.log(err);
+            expect(String(err)).eql('something');
+        }
+    });
+
 });
