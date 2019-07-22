@@ -10,3 +10,8 @@ exports.wallet = {
     money: "5000",
     owner: "Dan Howarth"
 }
+
+exports.queryResult = {
+    key: String,
+    result: {message: "Hello"}
+}

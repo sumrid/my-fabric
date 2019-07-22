@@ -7,6 +7,10 @@
     "test": "jest --coverage",
     "start": "node src/main.js"
   },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
+  },
   "keywords": [
     "api",
     "blockchain"

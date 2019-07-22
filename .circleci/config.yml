@@ -24,6 +24,7 @@ jobs:
             - v1-dependencies-
 
       - run: npm install
+      - run: npm install -g codecov
 
       - save_cache:
           paths:
@@ -35,6 +36,7 @@ jobs:
           name: run tests
           command: |
             npm test
+            codecov
 
   chaincode-test:
     docker:
