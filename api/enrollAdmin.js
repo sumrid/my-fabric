@@ -13,21 +13,28 @@ const ccpPath = path.resolve(__dirname, 'connection.json');   // ที่อย
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');  // อ่านไฟล์
 const ccp = JSON.parse(ccpJSON);         // เปลี่ยน string เป็น json
 
+const WALLET_NAME = 'wallet3';
 const ADMIN = 'admin';
-const ORG_MSP = 'Org1MSP';
+const ORG_MSP = 'Org3MSP';
+const CA_NAME = 'ca3.example.com';
 
 async function main() {
     try {
-        
+
         // Create a new CA client for interacting with the CA.
-        const caURL = ccp.certificateAuthorities['ca1.example.com'].url;
+        const caURL = ccp.certificateAuthorities[CA_NAME].url;
         const ca = new FabricCAServices(caURL);
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), 'wallet');
+        // path ./src/wallet
+        const walletPath = path.join(process.cwd(), 'src', WALLET_NAME);
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
+
+        // ################
+        //   Enroll admin
+        // ################
         // Check to see if we've already enrolled the admin user.
         const adminExists = await wallet.exists(ADMIN);
         if (adminExists) {
