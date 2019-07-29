@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const server = express();
 const hostname = '0.0.0.0';
 const port = 8000;
 
 // Use middleware
+server.use(cors());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended : true, useNewUrlParser: true }));
 

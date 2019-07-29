@@ -31,7 +31,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
       - run:
           name: run tests
           command: |
@@ -53,7 +52,8 @@ jobs:
       - run:
           name: Test chaincode
           command: |
-            go test
+            go test -race -coverprofile=coverage.txt -covermode=atomic
+            bash <(curl -s https://codecov.io/bash)
 
 workflows:
   version: 2

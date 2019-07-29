@@ -12,7 +12,7 @@ exports.query = async key => {
         };
         return res;
     } catch (err) {
-        throw err;
+        return err;
     }
 }
 
